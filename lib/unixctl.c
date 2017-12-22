@@ -313,7 +313,7 @@ process_command(struct unixctl_conn *conn, struct jsonrpc_msg *request)
 
         if (!error) {
             command->cb(conn, argv.n, (const char **) argv.names,
-                        command->aux);
+                        command->aux); ///command func
         }
 
         svec_destroy(&argv);
@@ -346,7 +346,7 @@ run_connection(struct unixctl_conn *conn)
         jsonrpc_recv(conn->rpc, &msg);
         if (msg) {
             if (msg->type == JSONRPC_REQUEST) {
-                process_command(conn, msg);
+                process_command(conn, msg); ///process command
             } else {
                 VLOG_WARN_RL(&rl, "%s: received unexpected %s message",
                              jsonrpc_get_name(conn->rpc),
@@ -397,7 +397,7 @@ unixctl_server_run(struct unixctl_server *server)
 
     struct unixctl_conn *conn, *next;
     LIST_FOR_EACH_SAFE (conn, next, node, &server->conns) {
-        int error = run_connection(conn);
+        int error = run_connection(conn);///
         if (error && error != EAGAIN) {
             kill_connection(conn);
         }

@@ -251,7 +251,7 @@ struct vport *ovs_vport_add(const struct vport_parms *parms)
 		if (!try_module_get(ops->owner))
 			return ERR_PTR(-EAFNOSUPPORT);
 
-		vport = ops->create(parms);
+		vport = ops->create(parms); /// see ovs_vxlan_netdev_vport_ops
 		if (IS_ERR(vport)) {
 			module_put(ops->owner);
 			return vport;

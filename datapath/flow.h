@@ -207,21 +207,21 @@ struct flow_stats {
 	spinlock_t lock;		/* Lock for atomic stats update. */
 	__be16 tcp_flags;		/* Union of seen TCP flags. */
 };
-
+/// flow table entry
 struct sw_flow {
 	struct rcu_head rcu;
 	struct {
 		struct hlist_node node[2];
 		u32 hash;
-	} flow_table, ufid_table;
+	} flow_table, ufid_table; /// hash table node
 	int stats_last_writer;		/* CPU id of the last writer on
 					 * 'stats[0]'.
 					 */
-	struct sw_flow_key key;
+	struct sw_flow_key key; ///key
 	struct sw_flow_id id;
 	struct cpumask cpu_used_mask;
 	struct sw_flow_mask *mask;
-	struct sw_flow_actions __rcu *sf_acts;
+	struct sw_flow_actions __rcu *sf_acts; ///action
 	struct flow_stats __rcu *stats[]; /* One for each CPU.  First one
 					   * is allocated at flow creation time,
 					   * the rest are allocated on demand

@@ -96,7 +96,7 @@ static struct net_device *get_dpdev(const struct datapath *dp)
 struct vport *ovs_netdev_link(struct vport *vport, const char *name)
 {
 	int err;
-
+    /// name -> net_device for vport
 	vport->dev = dev_get_by_name(ovs_dp_get_net(vport->dp), name);
 	if (!vport->dev) {
 		err = -ENODEV;
@@ -116,9 +116,9 @@ struct vport *ovs_netdev_link(struct vport *vport, const char *name)
 					   get_dpdev(vport->dp), NULL, NULL);
 	if (err)
 		goto error_unlock;
-
+    /// set dev->rx_handler for vport net device
 	err = netdev_rx_handler_register(vport->dev, netdev_frame_hook,
-					 vport);
+					 vport); ///__netif_receive_skb_core call this function
 	if (err)
 		goto error_master_upper_dev_unlink;
 

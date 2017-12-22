@@ -1110,8 +1110,8 @@ static int do_execute_actions(struct datapath *dp, struct sk_buff *skb,
 		int err = 0;
 
 		switch (nla_type(a)) {
-		case OVS_ACTION_ATTR_OUTPUT: {
-			int port = nla_get_u32(a);
+		case OVS_ACTION_ATTR_OUTPUT: { /// output action
+			int port = nla_get_u32(a); /// target port
 			struct sk_buff *clone;
 
 			/* Every output action needs a separate clone

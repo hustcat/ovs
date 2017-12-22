@@ -159,7 +159,7 @@ main_loop(struct ovsdb_jsonrpc_server *jsonrpc, struct shash *all_dbs,
     *exiting = false;
     ssl_error = NULL;
     remotes_error = NULL;
-    while (!*exiting) {
+    while (!*exiting) { ///while forever
         memory_run();
         if (memory_should_report()) {
             struct simap usage;
@@ -178,7 +178,7 @@ main_loop(struct ovsdb_jsonrpc_server *jsonrpc, struct shash *all_dbs,
         /* Run unixctl_server_run() before reconfigure_remotes() because
          * ovsdb-server/add-remote and ovsdb-server/remove-remote can change
          * the set of remotes that reconfigure_remotes() uses. */
-        unixctl_server_run(unixctl);
+        unixctl_server_run(unixctl); //// run unix server
 
         /* In ovsdb-server's role (active or backup) has changed, restart
          * the ovsdb jsonrpc server.  */
@@ -428,7 +428,7 @@ main(int argc, char *argv[])
     }
 
     main_loop(jsonrpc, &all_dbs, unixctl, &remotes, run_process, &exiting,
-              &is_backup);
+              &is_backup); ////main entry
 
     ovsdb_jsonrpc_server_destroy(jsonrpc);
     SHASH_FOR_EACH_SAFE(node, next, &all_dbs) {
