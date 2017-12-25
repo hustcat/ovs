@@ -228,7 +228,7 @@ struct netdev_flow_dump {
  * although implementations should try to avoid this. connectivity_seq_get()
  * can be used to acquire a reference to the struct seq. The interface is
  * described in detail in seq.h. */
-struct netdev_class {
+struct netdev_class { //netdev_linux_class/netdev_tap_class
     /* Type of netdevs in this class, e.g. "system", "tap", "gre", etc.
      *
      * One of the providers should supply a "system" type, since this is

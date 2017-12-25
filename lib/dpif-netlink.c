@@ -838,7 +838,7 @@ dpif_netlink_port_add__(struct dpif_netlink *dpif, const char *name,
     }
 
     dpif_netlink_vport_init(&request);
-    request.cmd = OVS_VPORT_CMD_NEW;
+    request.cmd = OVS_VPORT_CMD_NEW; ///new port
     request.dp_ifindex = dpif->dp_ifindex;
     request.type = type;
     request.name = name;
@@ -1905,7 +1905,7 @@ dpif_netlink_operate__(struct dpif_netlink *dpif,
         aux->txn.reply = NULL;
 
         switch (op->type) {
-        case DPIF_OP_FLOW_PUT:
+        case DPIF_OP_FLOW_PUT: ///add flow
             put = &op->u.flow_put;
             dpif_netlink_init_flow_put(dpif, put, &flow);
             if (put->stats) {

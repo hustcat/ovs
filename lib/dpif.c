@@ -577,7 +577,7 @@ dpif_port_add(struct dpif *dpif, struct netdev *netdev, odp_port_t *port_nop)
         port_no = *port_nop;
     }
 
-    error = dpif->dpif_class->port_add(dpif, netdev, &port_no);
+    error = dpif->dpif_class->port_add(dpif, netdev, &port_no); ///dpif_netlink_class, dpif_netdev_class(->dpif_netdev_port_add)
     if (!error) {
         VLOG_DBG_RL(&dpmsg_rl, "%s: added %s as port %"PRIu32,
                     dpif_name(dpif), netdev_name, port_no);
@@ -1355,7 +1355,7 @@ dpif_operate(struct dpif *dpif, struct dpif_op **ops, size_t n_ops)
              * handle itself, without help. */
             size_t i;
 
-            dpif->dpif_class->operate(dpif, ops, chunk);
+            dpif->dpif_class->operate(dpif, ops, chunk); ///dpif_netlink_class(->dpif_netlink_operate)
 
             for (i = 0; i < chunk; i++) {
                 struct dpif_op *op = ops[i];
@@ -1575,7 +1575,7 @@ dpif_recv(struct dpif *dpif, uint32_t handler_id, struct dpif_upcall *upcall,
     int error = EAGAIN;
 
     if (dpif->dpif_class->recv) {
-        error = dpif->dpif_class->recv(dpif, handler_id, upcall, buf);
+        error = dpif->dpif_class->recv(dpif, handler_id, upcall, buf); ///dpif_netlink_class(->dpif_netlink_recv)
         if (!error) {
             dpif_print_packet(dpif, upcall);
         } else if (error != EAGAIN) {

@@ -536,7 +536,7 @@ ofproto_create(const char *datapath_name, const char *datapath_type,
     ovs_mutex_init(&ofproto->vl_mff_map.mutex);
     cmap_init(&ofproto->vl_mff_map.cmap);
 
-    error = ofproto->ofproto_class->construct(ofproto);
+    error = ofproto->ofproto_class->construct(ofproto); ///ofproto_dpif_class->construct
     if (error) {
         VLOG_ERR("failed to open datapath %s: %s",
                  datapath_name, ovs_strerror(error));
@@ -1726,7 +1726,7 @@ ofproto_run(struct ofproto *p)
     int error;
     uint64_t new_seq;
 
-    error = p->ofproto_class->run(p);
+    error = p->ofproto_class->run(p); ///ofproto_dpif_class->run
     if (error && error != EAGAIN) {
         VLOG_ERR_RL(&rl, "%s: run failed (%s)", p->name, ovs_strerror(error));
     }
@@ -2000,7 +2000,7 @@ ofproto_port_add(struct ofproto *ofproto, struct netdev *netdev,
     ofp_port_t ofp_port = ofp_portp ? *ofp_portp : OFPP_NONE;
     int error;
 
-    error = ofproto->ofproto_class->port_add(ofproto, netdev);
+    error = ofproto->ofproto_class->port_add(ofproto, netdev); ///ofproto_dpif_class(->port_add)
     if (!error) {
         const char *netdev_name = netdev_get_name(netdev);
 

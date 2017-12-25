@@ -87,7 +87,7 @@ struct ct_dpif_tuple;
  * necessary to obtain a result.  Thus, they may not return EAGAIN or
  * EWOULDBLOCK or EINPROGRESS.  We may relax this requirement in the future if
  * and when we encounter performance problems. */
-struct dpif_class {
+struct dpif_class { /// see dpif_netlink_class/dpif_netdev_class
     /* Type of dpif in this class, e.g. "system", "netdev", etc.
      *
      * One of the providers should supply a "system" type, since this is

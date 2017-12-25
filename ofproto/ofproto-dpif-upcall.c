@@ -777,7 +777,7 @@ recv_upcalls(struct handler *handler)
 
         ofpbuf_use_stub(recv_buf, recv_stubs[n_upcalls],
                         sizeof recv_stubs[n_upcalls]);
-        if (dpif_recv(udpif->dpif, handler->handler_id, dupcall, recv_buf)) {
+        if (dpif_recv(udpif->dpif, handler->handler_id, dupcall, recv_buf)) { ///(1) read packet
             ofpbuf_uninit(recv_buf);
             break;
         }
@@ -793,7 +793,7 @@ recv_upcalls(struct handler *handler)
             mru = 0;
         }
 
-        error = upcall_receive(upcall, udpif->backer, &dupcall->packet,
+        error = upcall_receive(upcall, udpif->backer, &dupcall->packet,  /// (2)
                                dupcall->type, dupcall->userdata, flow, mru,
                                &dupcall->ufid, PMD_ID_NULL);
         if (error) {
@@ -822,7 +822,7 @@ recv_upcalls(struct handler *handler)
         flow_extract(&dupcall->packet, flow);
 
         error = process_upcall(udpif, upcall,
-                               &upcall->odp_actions, &upcall->wc);
+                               &upcall->odp_actions, &upcall->wc); /// (3)
         if (error) {
             goto cleanup;
         }
@@ -838,7 +838,7 @@ free_dupcall:
     }
 
     if (n_upcalls) {
-        handle_upcalls(handler->udpif, upcalls, n_upcalls);
+        handle_upcalls(handler->udpif, upcalls, n_upcalls); /// (4)
         for (i = 0; i < n_upcalls; i++) {
             dp_packet_uninit(&dupcalls[i].packet);
             ofpbuf_uninit(&recv_bufs[i]);
@@ -1079,7 +1079,7 @@ upcall_receive(struct upcall *upcall, const struct dpif_backer *backer,
     int error;
 
     error = xlate_lookup(backer, flow, &upcall->ofproto, &upcall->ipfix,
-                         &upcall->sflow, NULL, &upcall->in_port);
+                         &upcall->sflow, NULL, &upcall->in_port); //
     if (error) {
         return error;
     }
@@ -1150,7 +1150,7 @@ upcall_xlate(struct udpif *udpif, struct upcall *upcall,
     upcall->dump_seq = seq_read(udpif->dump_seq);
     upcall->reval_seq = seq_read(udpif->reval_seq);
 
-    xlate_actions(&xin, &upcall->xout);
+    xlate_actions(&xin, &upcall->xout); ////
     if (wc) {
         /* Convert the input port wildcard from OFP to ODP format. There's no
          * real way to do this for arbitrary bitmasks since the numbering spaces
@@ -1479,7 +1479,7 @@ handle_upcalls(struct udpif *udpif, struct upcall *upcalls,
     for (i = 0; i < n_ops; i++) {
         opsp[n_opsp++] = &ops[i].dop;
     }
-    dpif_operate(udpif->dpif, opsp, n_opsp);
+    dpif_operate(udpif->dpif, opsp, n_opsp);///
     for (i = 0; i < n_ops; i++) {
         struct udpif_key *ukey = ops[i].ukey;
 

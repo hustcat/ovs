@@ -271,7 +271,7 @@ void ovs_dp_process_packet(struct sk_buff *skb, struct sw_flow_key *key)
 	/* Look up flow. */
 	flow = ovs_flow_tbl_lookup_stats(&dp->table, key, skb_get_hash(skb),
 					 &n_mask_hit);
-	if (unlikely(!flow)) {
+	if (unlikely(!flow)) { /// not found flow entry, go to userspace
 		struct dp_upcall_info upcall;
 		int error;
 
@@ -290,7 +290,7 @@ void ovs_dp_process_packet(struct sk_buff *skb, struct sw_flow_key *key)
 
 	ovs_flow_stats_update(flow, key->tp.flags, skb);
 	sf_acts = rcu_dereference(flow->sf_acts);
-	ovs_execute_actions(dp, skb, sf_acts, key);
+	ovs_execute_actions(dp, skb, sf_acts, key); /// exec actions
 
 	stats_counter = &stats->n_hit;
 
@@ -550,7 +550,7 @@ static int queue_userspace_packet(struct datapath *dp, struct sk_buff *skb,
 
 	((struct nlmsghdr *) user_skb->data)->nlmsg_len = user_skb->len;
 
-	err = genlmsg_unicast(ovs_dp_get_net(dp), user_skb, upcall_info->portid);
+	err = genlmsg_unicast(ovs_dp_get_net(dp), user_skb, upcall_info->portid); /// to udpif_upcall_handler
 	user_skb = NULL;
 out:
 	if (err)
@@ -2278,7 +2278,7 @@ static struct genl_ops dp_vport_genl_ops[] = {
 	},
 };
 
-struct genl_family dp_vport_genl_family __ro_after_init = {
+struct genl_family dp_vport_genl_family = {///__ro_after_init = {
 	.hdrsize = sizeof(struct ovs_header),
 	.name = OVS_VPORT_FAMILY,
 	.version = OVS_VPORT_VERSION,

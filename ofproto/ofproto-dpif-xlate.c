@@ -7126,7 +7126,7 @@ xlate_actions(struct xlate_in *xin, struct xlate_out *xout)
             }
 
             mirror_ingress_packet(&ctx);
-            do_xlate_actions(ofpacts, ofpacts_len, &ctx, true);
+            do_xlate_actions(ofpacts, ofpacts_len, &ctx, true); ////
             if (ctx.error) {
                 goto exit;
             }

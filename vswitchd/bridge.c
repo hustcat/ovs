@@ -660,7 +660,7 @@ bridge_reconfigure(const struct ovsrec_open_vswitch *ovs_cfg)
     config_ofproto_types(&ovs_cfg->other_config);
 
     HMAP_FOR_EACH (br, node, &all_bridges) {
-        bridge_add_ports(br, &br->wanted_ports);
+        bridge_add_ports(br, &br->wanted_ports); /// add port
         shash_destroy(&br->wanted_ports);
     }
 
@@ -2915,7 +2915,7 @@ bridge_run__(void)
     sset_destroy(&types);
 
     /* Let each bridge do the work that it needs to do. */
-    HMAP_FOR_EACH (br, node, &all_bridges) {
+    HMAP_FOR_EACH (br, node, &all_bridges) { /// for each bridge
         ofproto_run(br->ofproto);
     }
 }
@@ -2974,7 +2974,7 @@ bridge_run(void)
                                         "flow-restore-wait", false));
     }
 
-    bridge_run__();
+    bridge_run__(); ////
 
     /* Re-configure SSL.  We do this on every trip through the main loop,
      * instead of just when the database changes, because the contents of the
@@ -2995,7 +2995,7 @@ bridge_run(void)
 
         idl_seqno = ovsdb_idl_get_seqno(idl);
         txn = ovsdb_idl_txn_create(idl);
-        bridge_reconfigure(cfg ? cfg : &null_cfg);
+        bridge_reconfigure(cfg ? cfg : &null_cfg);////
 
         if (cfg) {
             ovsrec_open_vswitch_set_cur_cfg(cfg, cfg->next_cfg);

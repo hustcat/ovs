@@ -70,7 +70,7 @@ extern struct ovs_mutex ofproto_mutex;
  * should not modify them. */
 struct ofproto {
     struct hmap_node hmap_node; /* In global 'all_ofprotos' hmap. */
-    const struct ofproto_class *ofproto_class;
+    const struct ofproto_class *ofproto_class; /// see ofproto_dpif_class 
     char *type;                 /* Datapath type. */
     char *name;                 /* Datapath name. */
 
